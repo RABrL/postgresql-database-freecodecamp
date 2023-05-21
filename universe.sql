@@ -50,7 +50,9 @@ SET default_table_access_method = heap;
 CREATE TABLE public.galaxy (
     galaxy_id integer NOT NULL,
     name character varying(30) NOT NULL,
-    age_in_million_of_years numeric
+    age_in_million_of_years numeric,
+    description text,
+    number_of_stars integer
 );
 
 
@@ -85,7 +87,9 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 CREATE TABLE public.moon (
     moon_id integer NOT NULL,
     name character varying(30) NOT NULL,
-    planet_id integer NOT NULL
+    planet_id integer NOT NULL,
+    is_spherical boolean DEFAULT true,
+    has_life boolean DEFAULT false
 );
 
 
@@ -122,7 +126,8 @@ CREATE TABLE public.planet (
     name character varying(30) NOT NULL,
     description text,
     has_life boolean DEFAULT true NOT NULL,
-    star_id integer NOT NULL
+    star_id integer NOT NULL,
+    planet_types_id integer
 );
 
 
@@ -192,8 +197,9 @@ ALTER SEQUENCE public.planet_types_planet_types_id_seq OWNED BY public.planet_ty
 CREATE TABLE public.star (
     star_id integer NOT NULL,
     name character varying(30) NOT NULL,
-    has_life boolean DEFAULT false,
-    galaxy_id integer NOT NULL
+    galaxy_id integer NOT NULL,
+    size integer,
+    description text
 );
 
 
@@ -419,6 +425,14 @@ ALTER TABLE ONLY public.star
 
 ALTER TABLE ONLY public.moon
     ADD CONSTRAINT fk_planet FOREIGN KEY (planet_id) REFERENCES public.planet(planet_id);
+
+
+--
+-- Name: planet fk_planet_type; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.planet
+    ADD CONSTRAINT fk_planet_type FOREIGN KEY (planet_types_id) REFERENCES public.planet_types(planet_types_id);
 
 
 --
